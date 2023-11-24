@@ -25,7 +25,6 @@ require("lua_boss/boss_32_meteor")
 require( "epic_boss_fight_game_round" )
 require( "epic_boss_fight_game_spawner" )
 require('lib.optionsmodule')
-require('stats')
 require( "libraries/Timers" )
 require( "libraries/vector_targeting" )
 require("libraries/disable_help")
@@ -40,6 +39,7 @@ LinkLuaModifier( "playerStatRescale", "modifier/playerStatRescale.lua", LUA_MODI
 LinkLuaModifier( "status_immune", "modifier/status_immune.lua", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_silence_generic", "modifier/modifier_silence_generic.lua", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_hidden_generic", "modifier/modifier_hidden_generic.lua", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_hide_healthbar", "modifier/modifier_hide_healthbar.lua", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_last_man_standing", "modifier/modifier_last_man_standing.lua", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_boss_enraged", "modifier/modifier_boss_enraged.lua", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_neutrals_ancestors_rage", "modifier/modifier_neutrals_ancestors_rage.lua", LUA_MODIFIER_MOTION_NONE )
@@ -269,6 +269,28 @@ function CHoldoutGameMode:InitGameMode()
 	Convars:RegisterCommand( "ebf_drop", function(...) return self._ItemDrop( ... ) end, "hello",0)
 	Convars:RegisterCommand( "ebf_drop", function(...) return self._ItemDrop( ... ) end, "hello",0)
 	Convars:RegisterCommand( "holdout_status_report", function(...) return self:_StatusReportConsoleCommand( ... ) end, "Report the status of the current holdout game.", FCVAR_CHEAT )
+	Convars:RegisterCommand( "reload_modifiers", function()
+											if Convars:GetDOTACommandClient() and IsInToolsMode() then
+												local player = Convars:GetDOTACommandClient()
+												local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+												if hero then
+													local modifierTable = {}
+													for _, modifier in ipairs( hero:FindAllModifiers() ) do
+														local modifierInfo = {}
+														modifierInfo.caster = modifier:GetCaster()
+														modifierInfo.ability = modifier:GetAbility()
+														modifierInfo.name = modifier:GetName()
+														modifierInfo.duration = modifier:GetDuration()
+														
+														table.insert( modifierTable, modifierInfo )
+														modifier:Destroy()
+													end
+													for _, modifierInfo in ipairs ( modifierTable ) do
+														hero:AddNewModifier( modifierInfo.caster, modifierInfo.ability, modifierInfo.name, {duration = modifierInfo.duration})
+													end
+												end
+											end
+										end, "fixing bug",0)					
 	Convars:RegisterCommand( "deepdebugging", function()
 													if not GameRules.DebugCalls then
 														print("Starting DebugCalls")
@@ -434,10 +456,10 @@ function CHoldoutGameMode:FilterGold( filterTable )
 	local startGold = filterTable.gold
 	if hero then	
 		local bonusGold = 0
-		local midas = hero:FindModifierByName("modifier_hand_of_midas_passive")
-		if midas then
-			bonusGold = math.floor( startGold * (midas.bonus_gold or 0) )
-		end
+		-- local midas = hero:FindModifierByName("modifier_hand_of_midas_passive")
+		-- if midas then
+			-- bonusGold = math.floor( startGold * (midas.bonus_gold or 0) )
+		-- end
 		if hero:HasAbility("alchemist_goblins_greed") then
 			bonusGold = math.floor( startGold * hero:FindAbilityByName("alchemist_goblins_greed"):GetSpecialValueFor("bonus_gold")  / 100 )
 		end
@@ -542,6 +564,10 @@ function CHoldoutGameMode:FilterDamage( filterTable )
 	--- DAMAGE MANIPULATION ---
 	if ability and IGNORE_SPELL_AMP_FILTER[ability:GetName()] then
 		filterTable.damage = damage / ( 1+ ( attacker:GetSpellAmplification( false ) * (IGNORE_SPELL_AMP_FILTER[ability:GetName()]/100)) )
+	end
+	-- MUERTA SPECIFIC FIX
+	if ability and ability:GetName() == "muerta_gunslinger" and attacker:HasModifier("modifier_muerta_pierce_the_veil_buff") then
+		filterTable.damage = damage / ( 1+ ( attacker:GetSpellAmplification( false ) * (IGNORE_SPELL_AMP_FILTER["muerta_pierce_the_veil"]/100)) )
 	end
 	if inflictor and attacker and not attacker:IsNull() and attacker.HasModifier and  attacker:HasModifier("spellcrit") then
 		local critDamage = 1
@@ -757,11 +783,6 @@ end
 
 -- Verify spawners if random is set
 function CHoldoutGameMode:OnConnectFull()
-	SendToServerConsole("dota_health_high_threshold 10")
-	SendToConsole("dota_health_high_marker_major_alpha 0")
-	SendToConsole("dota_health_marker_major_alpha 0")
-	SendToConsole("dota_health_marker_minor_alpha 0")
-	
 	local statSettings = LoadKeyValues("scripts/vscripts/statcollection/settings.kv")
 	local SERVER_LOCATION = statSettings.serverLocation
 	
@@ -1027,9 +1048,7 @@ function CHoldoutGameMode:OnGameRulesStateChange()
 		
 		
 	elseif nNewState == DOTA_GAMERULES_STATE_STRATEGY_TIME then
-		print( GameRules:GetTimeOfDay() )
 		GameRules:SetTimeOfDay(0.26)
-		print( GameRules:GetTimeOfDay() )
 		for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 			local player = PlayerResource:GetPlayer(nPlayerID)
 			if player and not PlayerResource:HasSelectedHero(nPlayerID) then
@@ -1037,24 +1056,30 @@ function CHoldoutGameMode:OnGameRulesStateChange()
 			end
 		end
 	elseif nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
-		GameRules:SetTimeOfDay(0.26)
-		if GetMapName() ~= "epic_boss_fight_challenger" then
-			ShowGenericPopup( "#holdout_instructions_title", "#holdout_instructions_body", "", "", DOTA_SHOWGENERICPOPUP_TINT_SCREEN )
-		else
-			ShowGenericPopup( "#holdout_instructions_title_challenger", "#holdout_instructions_body_challenger", "", "", DOTA_SHOWGENERICPOPUP_TINT_SCREEN )
-		end
-		GameRules.neutralCamps = {easy = {}, medium = {}, hard = {}, ancient = {}}
-		
-		for _, entity in ipairs( Entities:FindAllByClassname( "trigger_multiple" ) ) do
-			if string.find( entity:GetName(), "easy_camp" )  then
-				table.insert( GameRules.neutralCamps.easy, entity )
-			elseif string.find( entity:GetName(), "medium_camp" )  then
-				table.insert( GameRules.neutralCamps.medium, entity )
-			elseif string.find( entity:GetName(), "hard_camp" )  then
-				table.insert( GameRules.neutralCamps.hard, entity )
-			elseif string.find( entity:GetName(), "ancient_camp" ) then
-				table.insert( GameRules.neutralCamps.ancient, entity )
+		if not self._preGameSetupDone then
+			GameRules:SetTimeOfDay(0.26)
+			if GameRules:IsCheatMode() then
+				Say( nil, "type -startgame to start the game", false)
 			end
+			if GetMapName() ~= "epic_boss_fight_challenger" then
+				ShowGenericPopup( "#holdout_instructions_title", "#holdout_instructions_body", "", "", DOTA_SHOWGENERICPOPUP_TINT_SCREEN )
+			else
+				ShowGenericPopup( "#holdout_instructions_title_challenger", "#holdout_instructions_body_challenger", "", "", DOTA_SHOWGENERICPOPUP_TINT_SCREEN )
+			end
+			GameRules.neutralCamps = {easy = {}, medium = {}, hard = {}, ancient = {}}
+			
+			for _, entity in ipairs( Entities:FindAllByClassname( "trigger_multiple" ) ) do
+				if string.find( entity:GetName(), "easy_camp" )  then
+					table.insert( GameRules.neutralCamps.easy, entity )
+				elseif string.find( entity:GetName(), "medium_camp" )  then
+					table.insert( GameRules.neutralCamps.medium, entity )
+				elseif string.find( entity:GetName(), "hard_camp" )  then
+					table.insert( GameRules.neutralCamps.hard, entity )
+				elseif string.find( entity:GetName(), "ancient_camp" ) then
+					table.insert( GameRules.neutralCamps.ancient, entity )
+				end
+			end
+			self._preGameSetupDone = true
 		end
 	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		GameRules:SpawnNeutralCreeps()
@@ -1569,6 +1594,7 @@ function CHoldoutGameMode:_RefreshPlayers(bWon)
 			if PlayerResource:HasSelectedHero( nPlayerID ) then
 				local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 				if hero ~=nil then
+					hero:Dispel( hero, true )
 					if hero:IsMoving() or hero:IsChanneling() or hero:IsInvulnerable() or hero:IsOutOfGame() then
 						hero:Heal( hero:GetMaxHealth(), nil )
 						hero:GiveMana( hero:GetMaxMana() )
@@ -1850,16 +1876,16 @@ function CHoldoutGameMode:OnNPCSpawned( event )
 			end
 		end
 	end
+	-- if spawnedUnit:IsConsideredHero() and spawnedUnit:GetUnitName() ~= "npc_dota_healthbar_dummy" then
+		-- local dummy = CreateUnitByName("npc_dota_healthbar_dummy", spawnedUnit:GetAbsOrigin(), false, nil, nil, spawnedUnit:GetTeam())
+		-- dummy:SetHealthBarOffsetOverride( spawnedUnit:GetBaseHealthBarOffset() )
+		-- dummy:AddNewModifier(spawnedUnit, nil, "modifier_healthbar_dummy", {})
+		-- spawnedUnit:AddNewModifier(spawnedUnit, nil, "modifier_hide_healthbar", {})
+	-- end
 end
 
 function CHoldoutGameMode:OnPlayerReconnected( event )
 	local nReconnectedPlayerID = event.PlayerID
-	
-    SendToConsole("dota_health_high_threshold 10")
-    SendToServerConsole("dota_health_high_threshold 10")
-    SendToConsole("dota_health_high_marker_major_alpha 0")
-	SendToConsole("dota_health_marker_major_alpha 0")
-	SendToConsole("dota_health_marker_minor_alpha 0")
 	
 	local player = PlayerResource:GetPlayer( nReconnectedPlayerID )
 	if not PlayerResource:HasSelectedHero(nReconnectedPlayerID) then

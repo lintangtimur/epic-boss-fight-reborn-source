@@ -10587,6 +10587,30 @@
 			}
 		}
 	}
+	
+	//=================================================================================================================
+	// Ability: Special Bonus
+	//=================================================================================================================
+	"special_bonus_strength_1000"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"special_bonus_base"
+		"SpecialBonusIntrinsicModifier" "modifier_special_bonus_strength"
+		"AbilityType"					"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"value"						"1000"
+			}
+		}
+	}
 	//=================================================================================================================
 	// Ability: Special Bonus
 	//=================================================================================================================
@@ -10627,6 +10651,26 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"value"						"400"
+			}
+		}
+	}
+	"special_bonus_intelligence_750"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"special_bonus_base"
+		"SpecialBonusIntrinsicModifier" "modifier_special_bonus_intelligence"
+		"AbilityType"					"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"value"						"750"
 			}
 		}
 	}
@@ -10762,6 +10806,26 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"value"						"500"
+			}
+		}
+	}
+	"special_bonus_agility_1000"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"special_bonus_base"
+		"SpecialBonusIntrinsicModifier" "modifier_special_bonus_agility"
+		"AbilityType"					"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"value"						"1000"
 			}
 		}
 	}
@@ -11176,8 +11240,7 @@
 			}
 		}
 	}
-
-		"special_bonus_attack_speed_800"
+	"special_bonus_attack_speed_800"
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
@@ -11196,8 +11259,6 @@
 			}
 		}
 	}
-
-
 	"special_bonus_attack_speed_400"
 	{
 		// General
@@ -11214,6 +11275,25 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"value"						"400"
+			}
+		}
+	}
+	"special_bonus_attack_speed_150"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"special_bonus_attack_speed_80"
+		"AbilityType"					"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"value"						"150"
 			}
 		}
 	}

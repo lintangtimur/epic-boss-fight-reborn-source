@@ -38,6 +38,7 @@ end
 
 function bossManager:onBossSpawn(spawnedUnit)
 	if spawnedUnit:GetUnitName() == "npc_dota_healthbar_dummy" then return end
+	if spawnedUnit:GetTeam() == DOTA_TEAM_BADGUYS and not IsInToolsMode() then return end -- only way to get these is with console commands
 	if spawnedUnit:IsCreature() then
 		if spawnedUnit.hasBeenProcessed then return end
 		spawnedUnit:SetHullRadius( math.min( 48, 24 * (1 + (spawnedUnit:GetModelScale()-1)/2) ) )
@@ -102,14 +103,11 @@ function bossManager:onBossSpawn(spawnedUnit)
 			end
 			
 			spawnedUnit.EHP_MULT = 1
-			if spawnedUnit:IsConsideredHero() then
-				-- spawnedUnit:SetCustomHealthLabel( "npc_dota_boss_label", 180, 180, 180 )
+			if spawnedUnit:IsConsideredHero() and spawnedUnit:GetUnitName() ~= "npc_dota_healthbar_dummy" then
 				local dummy = CreateUnitByName("npc_dota_healthbar_dummy", spawnedUnit:GetAbsOrigin(), false, nil, nil, spawnedUnit:GetTeam())
 				dummy:SetHealthBarOffsetOverride( spawnedUnit:GetBaseHealthBarOffset() )
-				dummy:AddNewModifier(self, nil, "modifier_healthbar_dummy", {})
-				-- dummy:SetParent(spawnedUnit, "")
-				-- dummy:FollowEntityMerge(spawnedUnit, "")
-				dummy.getParentEntity = spawnedUnit
+				dummy:AddNewModifier(spawnedUnit, nil, "modifier_healthbar_dummy", {})
+				spawnedUnit:AddNewModifier(spawnedUnit, nil, "modifier_hide_healthbar", {})
 			end
 			if spawnedUnit:GetUnitName() ~= "npc_dota_boss36" then -- don't scale evil core ever
 				if spawnedUnit.MaxEHP >= 800000000 then

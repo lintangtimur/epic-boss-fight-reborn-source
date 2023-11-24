@@ -178,6 +178,10 @@ function modifier_special_bonus_attributes_stat_rescaling:OnRefresh()
 	end
 end
 
+-- function modifier_special_bonus_attributes_stat_rescaling:CheckState()
+	-- return {[MODIFIER_STATE_NO_HEALTH_BAR] = true}
+-- end
+
 function modifier_special_bonus_attributes_stat_rescaling:DeclareFunctions()
   local funcs = {
 		-- MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
@@ -193,7 +197,7 @@ function modifier_special_bonus_attributes_stat_rescaling:DeclareFunctions()
 		MODIFIER_PROPERTY_TOTAL_CONSTANT_BLOCK_UNAVOIDABLE_PRE_ARMOR,
 		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
 		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE,
-		MODIFIER_PROPERTY_CASTTIME_PERCENTAGE
+		MODIFIER_PROPERTY_CASTTIME_PERCENTAGE,
   }
   return funcs
 end

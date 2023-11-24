@@ -69,6 +69,7 @@
 	"npc_dota_hero_clinkz_ebf"
 	{
 		"override_hero"			"npc_dota_hero_clinkz"
+		"Ability12"				"special_bonus_unique_clinkz_8"
 		"Ability14"				"special_bonus_all_stats_500"
 	}
 	"npc_dota_hero_doom_bringer_ebf"
@@ -81,7 +82,7 @@
 	{
 		"override_hero"			"npc_dota_hero_ember_spirit"
 		
-		"Ability10"				"special_bonus_attack_damage_1250"
+		"Ability10"				"special_bonus_unique_ember_spirit_searing_chains_dps"
 		
 		"MagicalResistance"				"40"
 	}
@@ -89,7 +90,7 @@
 	{
 		"override_hero"			"npc_dota_hero_gyrocopter"
 		
-		"Ability11"				"special_bonus_hp_2000"
+		"Ability11"				"special_bonus_unique_gyrocopter_call_down_damage"
 	}
 	"npc_dota_hero_faceless_void_ebf"
 	{
@@ -255,6 +256,15 @@
 	"npc_dota_hero_dark_willow_ebf"
 	{
 		"override_hero"			"npc_dota_hero_dark_willow"
+		
+		"Ability10"				"special_bonus_unique_dark_willow_6"
+		"Ability11"				"special_bonus_attack_speed_150"
+		"Ability12"				"special_bonus_unique_dark_willow_4"
+		"Ability13"				"special_bonus_unique_dark_willow_7"
+		"Ability14"				"special_bonus_unique_dark_willow_1"
+		"Ability15"				"special_bonus_unique_dark_willow_3"
+		"Ability16"				"special_bonus_unique_dark_willow_5"
+		"Ability17"				"special_bonus_unique_dark_willow_bedlam_targets"
 	}
 	"npc_dota_hero_zuus_ebf"
 	{
@@ -294,11 +304,11 @@
 		"Ability6"				"kunkka_ghostship"
 		"Ability7"				"kunkka_return"
 		
-		"Ability10"				"special_bonus_unique_kunkka_tidebringer_slow"
-		"Ability11"				"special_bonus_unique_kunkka_tidal_wave_damage"
+		"Ability10"				"special_bonus_unique_kunkka_tidal_wave_damage"
+		"Ability11"				"special_bonus_unique_kunkka_tidebringer_slow"
 		"Ability12"				"special_bonus_unique_kunkka_7"
-		"Ability13"				"special_bonus_attack_damage_750"
-		"Ability14"				"special_bonus_unique_kunkka"
+		"Ability13"				"special_bonus_unique_kunkka_tidebringer_damage"
+		"Ability14"				"special_bonus_unique_kunkka_ghostship_duration"
 		"Ability15"				"special_bonus_unique_kunkka_4"
 		"Ability16"				"special_bonus_unique_kunkka_3"
 		"Ability17"				"special_bonus_unique_kunkka_5"
@@ -309,9 +319,9 @@
 	{
 		"override_hero"			"npc_dota_hero_life_stealer"
 		
-		"Ability10"				"special_bonus_attack_speed_30"
-		"Ability12"				"special_bonus_attack_damage_750"
-		"Ability13"				"special_bonus_hp_6500"
+		"Ability10"				"special_bonus_unique_lifestealer_rage_armor"
+		"Ability12"				"special_bonus_unique_lifestealer_feast_damage"
+		"Ability13"				"special_bonus_strength_450"
 		
 		"MagicalResistance"				"40"
 	}
@@ -353,7 +363,7 @@
 	{
 		"override_hero"			"npc_dota_hero_broodmother"
 		
-		"Ability15"				"special_bonus_agility_300"
+		"Ability15"				"special_bonus_agility_1000"
 		
 		"MagicalResistance"				"40"
 	}
@@ -362,7 +372,7 @@
 		"override_hero"			"npc_dota_hero_viper"
 		
 		"Ability10"		"special_bonus_attack_speed_200"
-		"Ability13"		"special_bonus_hp_6500"
+		"Ability13"		"special_bonus_all_stats_500"
 	}
 	"npc_dota_hero_juggernaut_ebf"
 	{
@@ -405,9 +415,9 @@
 	{
 		"override_hero"			"npc_dota_hero_disruptor"
 		
-		"Ability10"				"special_bonus_attack_damage_750"
+		"Ability10"				"special_bonus_intelligence_750"
 		"Ability11"				"special_bonus_magic_resistance_12"
-		"Ability15"				"special_bonus_hp_24000"
+		"Ability15"				"special_bonus_unique_disruptor_consecutive_strike_damage"
 	}
 	"npc_dota_hero_leshrac_ebf"
 	{
@@ -518,6 +528,15 @@
 	{
 		"override_hero"			"npc_dota_hero_mars"	
 		
+		"Ability10"		"special_bonus_unique_mars_spear_bonus_damage"
+		"Ability11"		"special_bonus_unique_mars_bulwark_damage_reduction"
+		"Ability12"		"special_bonus_unique_mars_rebuke_cooldown"
+		"Ability13"		"special_bonus_unique_mars_rebuke_on_bulwark"
+		"Ability14"		"special_bonus_unique_mars_spear_on_attack"
+		"Ability15"		"special_bonus_unique_mars_spear_stun_duration"
+		"Ability16"		"special_bonus_unique_mars_gods_rebuke_extra_crit"
+		"Ability17"		"special_bonus_unique_mars_arena_of_blood_hp_regen"
+		
 		"MagicalResistance"				"40"
 	}
 	"npc_dota_hero_marci_ebf"
@@ -547,6 +566,16 @@
 	{
 		"override_hero"			"npc_dota_hero_pugna"
 		"Ability11"				"special_bonus_hp_2000"
+		
+		
+		"Ability10"				"special_bonus_unique_pugna_2"
+		"Ability11"				"special_bonus_unique_pugna_nether_ward_rate"
+		"Ability12"				"special_bonus_unique_pugna_4"
+		"Ability13"				"special_bonus_unique_pugna_6"
+		"Ability14"				"special_bonus_unique_pugna_1"
+		"Ability15"				"special_bonus_unique_pugna_5"
+		"Ability16"				"special_bonus_unique_pugna_life_drain_duration"
+		"Ability17"				"special_bonus_unique_pugna_aoe_decrepify"
 		
 	}
 	"npc_dota_hero_queenofpain_ebf"
@@ -739,13 +768,23 @@
 	"npc_dota_hero_tidehunter_ebf"
 	{
 		"override_hero"			"npc_dota_hero_tidehunter"
+		"Ability14"				""
+		
+		"Ability10"				"special_bonus_unique_tidehunter_9"
+		"Ability11"				"special_bonus_unique_tidehunter_5"
+		"Ability12"				"special_bonus_unique_tidehunter_2"
+		"Ability13"				"special_bonus_unique_tidehunter_3"
 		"Ability14"				"special_bonus_strength_800"
+		"Ability15"				"special_bonus_unique_tidehunter_4"
+		"Ability16"				"special_bonus_unique_tidehunter_7"
+		"Ability17"				"special_bonus_unique_tidehunter_anchor_smash_radius"
 		
 		"MagicalResistance"				"40"
 	}
 	"npc_dota_hero_venomancer_ebf"
 	{
 		"override_hero"			"npc_dota_hero_venomancer"
+		"Ability4"				"generic_hidden"
 		"Ability15"				"special_bonus_all_stats_500"
 		
 	}
@@ -781,7 +820,7 @@
 	"npc_dota_hero_earthshaker_ebf"
 	{
 		"override_hero"		"npc_dota_hero_earthshaker"
-		"Ability10"		"special_bonus_attack_damage_3000"
+		"Ability10"		"special_bonus_strength_1000"
 		
 		"MagicalResistance"				"40"
 	}
@@ -862,7 +901,7 @@
 		"override_hero"					"npc_dota_hero_muerta"
 		
 		"Ability11"						"special_bonus_strength_400"
-		"Ability13"						"special_bonus_attack_damage_1000"
+		"Ability13"						"special_bonus_intelligence_1000"
 	}
 	"npc_dota_hero_witch_doctor"
 	{
