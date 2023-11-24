@@ -25,7 +25,6 @@ end
 function modifier_hand_of_midas_passive:OnRefresh()
 	self.bonus_attack_speed = self:GetSpecialValueFor("bonus_attack_speed")
 	if IsServer() then
-		print("midas refresh?")
 		self:SendBuffRefreshToClients()
 	end
 end
@@ -43,7 +42,7 @@ function modifier_hand_of_midas_passive:OnTooltip()
 end
 
 function modifier_hand_of_midas_passive:OnTooltip2()
-	return self.total_gold - self.banked_gold
+	return (self.total_gold or 0) - (self.banked_gold or 0)
 end
 
 function modifier_hand_of_midas_passive:AddCustomTransmitterData()

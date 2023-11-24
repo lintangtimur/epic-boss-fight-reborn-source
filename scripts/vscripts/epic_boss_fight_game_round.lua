@@ -181,16 +181,25 @@ function CHoldoutGameRound:End(bWon)
 			local goldForLiving = self._nMaxGoldForVictory * (goldMuliplierTeam + goldMuliplierSolo)
 			local goldToProvide = self._nMaxGoldForVictory + self._nGoldRemainingInRound
 			
-			print( goldToProvide, goldForLiving, self._nMaxGoldForVictory, self._nGoldRemainingInRound )
 			local player = hero:GetPlayerOwner()
 			if hero:GetTeamNumber() == DOTA_TEAM_GOODGUYS then 
 				if PlayerResource:GetConnectionState( hero:GetPlayerID() ) ~= DOTA_CONNECTION_STATE_ABANDONED then
-					local midas = hero:FindItemInInventory("item_hand_of_midas_ebf")
-					if midas then
+					local midas
+					for i = DOTA_ITEM_SLOT_1, DOTA_ITEM_SLOT_6, 1 do
+						print(i, "slot")
+						local item = hero:GetItemInSlot(i)
+						if item and item:GetName() == "item_hand_of_midas_ebf" then
+							midas = item
+							print("midas recovered", midas)
+							break
+						end
+					end
+					print( midas, "found midas" )
+					if midas and (midas._currentGoldStorage or 0) < 99999 then
 						midas._currentGoldStorage = (midas._currentGoldStorage or 0) * (1 + midas:GetSpecialValueFor("interest_rate") / 100)
 					end
 					Timers:CreateTimer( 0.5, function()
-						if midas then
+						if midas and midas._currentGoldStorage < 99999 then
 							local goldToBank = goldToProvide * midas:GetSpecialValueFor("bonus_gold") / 100
 							midas._currentGoldStorage = midas._currentGoldStorage + goldToBank
 							midas._roundRewardsBanked = (midas._roundRewardsBanked or 0) + goldToBank
@@ -206,7 +215,7 @@ function CHoldoutGameRound:End(bWon)
 					end)
 					if goldMuliplierTeam + goldMuliplierSolo > 0 then
 						Timers:CreateTimer( 1.5, function()
-							if midas then
+							if midas and midas._currentGoldStorage < 99999 then
 								local goldToBank = goldForLiving * midas:GetSpecialValueFor("bonus_gold") / 100
 								midas._currentGoldStorage = midas._currentGoldStorage + goldToBank
 								midas._roundRewardsBanked = (midas._roundRewardsBanked or 0) + goldToBank
