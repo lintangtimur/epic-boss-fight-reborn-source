@@ -31,7 +31,7 @@ function modifier_hand_of_midas_passive:OnRefresh()
 end
 
 function modifier_hand_of_midas_passive:DeclareFunctions()
-	return {MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT, MODIFIER_PROPERTY_TOOLTIP}
+	return {MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT, MODIFIER_PROPERTY_TOOLTIP, MODIFIER_PROPERTY_TOOLTIP2}
 end
 
 function modifier_hand_of_midas_passive:GetModifierAttackSpeedBonus_Constant()
@@ -42,13 +42,18 @@ function modifier_hand_of_midas_passive:OnTooltip()
 	return self.total_gold
 end
 
+function modifier_hand_of_midas_passive:OnTooltip2()
+	return self.total_gold - self.banked_gold
+end
+
 function modifier_hand_of_midas_passive:AddCustomTransmitterData()
-	return { total_gold = self:GetAbility()._currentGoldStorage }
+	return { total_gold = self:GetAbility()._currentGoldStorage,
+			 banked_gold = self:GetAbility()._roundRewardsBanked }
 end
 
 function modifier_hand_of_midas_passive:HandleCustomTransmitterData(data)
 	self.total_gold = data.total_gold
-	print( self.total_gold, data.total_gold )
+	self.banked_gold = data.banked_gold
 end
 
 function modifier_hand_of_midas_passive:IsHidden()

@@ -175,15 +175,16 @@ function CHoldoutGameRound:End(bWon)
 			end
 		end
 		
-		local goldToProvide = self._nMaxGoldForVictory + self._nGoldRemainingInRound
 		local expToProvide = self._nExpRemainingInRound
-		self._nGoldRemainingInRound = 0
-		self._nExpRemainingInRound = 0
 		for _, hero in ipairs( HeroList:GetRealHeroes() ) do
+			local goldMuliplierSolo = TernaryOperator( 0.25, (self._heroesDiedThisRound[hero] or 0 > 0), 0)
+			local goldForLiving = self._nMaxGoldForVictory * (goldMuliplierTeam + goldMuliplierSolo)
+			local goldToProvide = self._nMaxGoldForVictory + self._nGoldRemainingInRound
+			
+			print( goldToProvide, goldForLiving, self._nMaxGoldForVictory, self._nGoldRemainingInRound )
 			local player = hero:GetPlayerOwner()
 			if hero:GetTeamNumber() == DOTA_TEAM_GOODGUYS then 
 				if PlayerResource:GetConnectionState( hero:GetPlayerID() ) ~= DOTA_CONNECTION_STATE_ABANDONED then
-					local goldMuliplierSolo = TernaryOperator( 0.25, (self._heroesDiedThisRound[hero] or 0 > 0), 0)
 					local midas = hero:FindItemInInventory("item_hand_of_midas_ebf")
 					if midas then
 						midas._currentGoldStorage = (midas._currentGoldStorage or 0) * (1 + midas:GetSpecialValueFor("interest_rate") / 100)
@@ -192,6 +193,7 @@ function CHoldoutGameRound:End(bWon)
 						if midas then
 							local goldToBank = goldToProvide * midas:GetSpecialValueFor("bonus_gold") / 100
 							midas._currentGoldStorage = midas._currentGoldStorage + goldToBank
+							midas._roundRewardsBanked = (midas._roundRewardsBanked or 0) + goldToBank
 							goldToProvide = goldToProvide - goldToBank
 							
 							local tooltip = hero:FindModifierByNameAndAbility( "modifier_hand_of_midas_passive", midas )
@@ -204,10 +206,10 @@ function CHoldoutGameRound:End(bWon)
 					end)
 					if goldMuliplierTeam + goldMuliplierSolo > 0 then
 						Timers:CreateTimer( 1.5, function()
-							local goldForLiving = self._nMaxGoldForVictory * (goldMuliplierTeam + goldMuliplierSolo)
 							if midas then
-								local goldToBank = goldForLiving * 1-midas:GetSpecialValueFor("bonus_gold") / 100
+								local goldToBank = goldForLiving * midas:GetSpecialValueFor("bonus_gold") / 100
 								midas._currentGoldStorage = midas._currentGoldStorage + goldToBank
+								midas._roundRewardsBanked = (midas._roundRewardsBanked or 0) + goldToBank
 								goldForLiving = goldForLiving - goldToBank
 								
 								local tooltip = hero:FindModifierByNameAndAbility( "modifier_hand_of_midas_passive", midas )
@@ -239,7 +241,8 @@ function CHoldoutGameRound:End(bWon)
 				end
 			end
 		end
-		
+		self._nGoldRemainingInRound = 0
+		self._nExpRemainingInRound = 0
 	end
 	-- for _,unit in pairs( Entities:FindAllByClassname("npc_dota_thinker") ) do
 		-- if not ( unit:IsTower() or unit:IsHero() or unit:IsNeutralUnitType() ) then
