@@ -186,15 +186,12 @@ function CHoldoutGameRound:End(bWon)
 				if PlayerResource:GetConnectionState( hero:GetPlayerID() ) ~= DOTA_CONNECTION_STATE_ABANDONED then
 					local midas
 					for i = DOTA_ITEM_SLOT_1, DOTA_ITEM_SLOT_6, 1 do
-						print(i, "slot")
 						local item = hero:GetItemInSlot(i)
 						if item and item:GetName() == "item_hand_of_midas_ebf" then
 							midas = item
-							print("midas recovered", midas)
 							break
 						end
 					end
-					print( midas, "found midas" )
 					if midas and (midas._currentGoldStorage or 0) < 99999 then
 						midas._currentGoldStorage = (midas._currentGoldStorage or 0) * (1 + midas:GetSpecialValueFor("interest_rate") / 100)
 					end
