@@ -293,7 +293,7 @@
 
 		// Time		
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCooldown"				"120 100 80 71.1 63.2 53.3"
+		"AbilityCooldown"				"80"
 		"AbilityDuration"				"13.0"
 
 		// Cost
@@ -302,86 +302,54 @@
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilitySpecial"
+		"AbilityValues"
 		{
-			"01"
+			"first_radius"						
 			{
-				"var_type"							"FIELD_INTEGER"
-				"first_radius"						"300"
+				"value"		"300"
+				"affected_by_aoe_increase"	"1"		
 			}
-			"02"
+			"second_radius"						
 			{
-				"var_type"							"FIELD_INTEGER"
-				"second_radius"						"750"
+				"value"		"750"
+				"affected_by_aoe_increase"	"1"		
 			}
-			"03"
+			"num_first_soldiers"				"5"
+			"num_second_soldiers"				"9"
+			"move_speed"						"700"
+			"bonus_armor"						
 			{
-				"var_type"							"FIELD_INTEGER"
-				"num_first_soldiers"				"5"
+				"value"			"14 19 24"
+				"LinkedSpecialBonus"		"special_bonus_unique_monkey_king_4"
 			}
-			"04"
+			"attack_speed"						"1.2"
+			"duration"							"13.0"
+			"leadership_radius_buffer"			"30"
+			"cast_range"					
 			{
-				"var_type"							"FIELD_INTEGER"
-				"num_second_soldiers"				"9"
+				"value"						"625"
+				"special_bonus_unique_monkey_king_6"			"+350"
+
 			}
-			"05"
+			"cast_range_scepter"						
 			{
-				"var_type"							"FIELD_INTEGER"
-				"move_speed"						"700"
-			}
-			"06"
-			{
-				"var_type"							"FIELD_INTEGER"
-				"bonus_armor"						"14 19 24 29 34 39"
-				"LinkedSpecialBonus"				"special_bonus_unique_monkey_king_4"
-			}
-			"07"
-			{
-				"var_type"							"FIELD_FLOAT"
-				"attack_speed"						"1.2"
-			}
-			"08"
-			{
-				"var_type"							"FIELD_FLOAT"
-				"duration"							"13.0"
-			}
-			"09"
-			{
-				"var_type"							"FIELD_INTEGER"
-				"leadership_radius_buffer"			"30"
-			}
-			"10"
-			{
-				"var_type"							"FIELD_INTEGER"
-				"cast_range"						"550"
-			}
-			"11"
-			{
-				"var_type"							"FIELD_INTEGER"
-				"cast_range_scepter"						"1550"
+				"value"			"1550"
 				"RequiresScepter"	"1"
 			}
-			"12"
+			"outer_attack_buffer"				"0"
+			"cooldown_scepter"				
 			{
-				"var_type"							"FIELD_INTEGER"
-				"outer_attack_buffer"				"0"
-			}
-			"13"
-			{
-				"var_type"							"FIELD_INTEGER"
-				"cooldown_scepter"					"90 70 50 42.6 35.2 27.8"
+				"value"		"90 70 50"
 				"RequiresScepter"	"1"
 			}
-			"14"
+			"scepter_spawn_interval"
 			{
-				"var_type"							"FIELD_FLOAT"
-				"scepter_spawn_interval"			"4"
+				"value"			"4"
 				"RequiresScepter"	"1"
 			}
-			"15"
+			"scepter_spawn_duration"			
 			{
-				"var_type"							"FIELD_FLOAT"
-				"scepter_spawn_duration"			"12"
+				"value"		"12"
 				"RequiresScepter"	"1"
 			}
 		}
@@ -579,6 +547,7 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"value"				"1100"
+				"affected_by_aoe_increase"	"1"		
 				"ad_linked_abilities"			"monkey_king_wukongs_command"				// this is the ability this bonus affects.  This line is required for Ability Draft to correctly choose talents.
 			}
 			"02"
