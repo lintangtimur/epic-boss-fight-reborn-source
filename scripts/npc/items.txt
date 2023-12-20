@@ -2639,7 +2639,7 @@
 		{
 			"bonus_attack_speed"	"35"
 			"bonus_armor"			"3"
-			"aura_radius"			"900"
+			"aura_radius"			"1200"
 			"aura_attack_speed"		"20"
 			"aura_positive_armor"	"3"
 			"aura_negative_armor"	"-5"
